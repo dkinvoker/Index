@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
+using Windows.Storage.AccessCache;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,9 +28,119 @@ namespace Index
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        #region Props
+        public ObservableCollection<StorageFile> Files1 { get; set; } = new ObservableCollection<StorageFile>();
+        public ObservableCollection<StorageFile> Files2 { get; set; } = new ObservableCollection<StorageFile>();
+        #endregion
+
         public MainPage()
         {
             this.InitializeComponent();
+            Color color = new Color() { R = 0x7F, G = 0x7A, B = 0x6F, A = 0xFF };
+            Application.Current.Resources["SystemControlHighlightListAccentLowBrush"] = new SolidColorBrush(color);
+            Application.Current.Resources["SystemControlHighlightListAccentMediumBrush"] = new SolidColorBrush(color);
         }
+
+        #region Events Handlers
+        private async void Folder1_Button_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            var folder = await TakeFolderAccess(this.Folder1Name_TextBlock);
+            if (folder != null)
+            {
+                LoadFilesList(folder, Files1, Progress1_Grid);
+            } 
+        }
+
+        private async void Folder2_Button_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            var folder = await TakeFolderAccess(this.Folder2Name_TextBlock);
+            if (folder != null)
+            {
+                LoadFilesList(folder, Files2, Progress2_Grid);
+            }    
+        }
+
+        private void Menu_SplitView_PointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            var xPosition = e.GetCurrentPoint(Menu_SplitView).Position.X;
+            if (xPosition <= Menu_SplitView.CompactPaneLength)
+            {
+                Menu_SplitView.IsPaneOpen = true;
+            }
+            else if (xPosition > Menu_SplitView.OpenPaneLength)
+            {
+                Menu_SplitView.IsPaneOpen = false;
+            }
+        }
+        #endregion
+
+        #region Helpers
+        private async Task<StorageFolder> TakeFolderAccess(TextBlock textBlock)
+        {
+            var folderPicker = new Windows.Storage.Pickers.FolderPicker();
+            folderPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.Desktop;
+            folderPicker.FileTypeFilter.Add("*");
+
+            StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+                textBlock.Text = "Wybrany folder: " + folder.Name;
+                return folder;
+            }
+            else
+            {
+                textBlock.Text = "Anulowano";
+                return null;
+            }
+        }
+
+        private void ToggleLoadingVisibility(Grid grid)
+        {
+            if (grid.Visibility == Visibility.Collapsed)
+            {
+                grid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                grid.Visibility = Visibility.Collapsed;
+            }
+
+            var stackPanel = grid.Children.First(u => u.GetType() == typeof(StackPanel)) as StackPanel;
+            var progressRing = stackPanel.Children.First(u => u.GetType() == typeof(ProgressRing)) as ProgressRing;
+            progressRing.IsActive = !progressRing.IsActive;
+        }
+        #endregion
+
+        #region Others
+        private async Task LoadFilesList(StorageFolder folder, ICollection<StorageFile> files, Grid grid)
+        {
+            ToggleLoadingVisibility(grid);
+            files.Clear();
+            await GetFilesFromFolderAsync(folder, files);
+            ToggleLoadingVisibility(grid);
+        }
+
+        private async Task GetFilesFromFolderAsync(StorageFolder folder, ICollection<StorageFile> files)
+        {
+            var items = await folder.GetItemsAsync();
+            foreach (var item in items)
+            {
+                if (item.IsOfType(StorageItemTypes.File))
+                {
+                    files.Add(item as StorageFile);
+                }
+                else if (item.IsOfType(StorageItemTypes.Folder))
+                {
+                    await GetFilesFromFolderAsync(item as StorageFolder, files);
+                }
+                else
+                {
+                    throw new Exception("Wird Exception");
+                }
+            }
+
+        }
+        #endregion
+
     }
 }

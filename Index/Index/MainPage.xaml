@@ -7,8 +7,101 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
 
-    <Grid>
+    <SplitView HorizontalAlignment="Left" 
+               DisplayMode="CompactOverlay" 
+               OpenPaneLength="200" 
+               Name="Menu_SplitView"
+               CompactPaneLength="20"
+               PointerMoved="Menu_SplitView_PointerMoved">
 
-    </Grid>
+        <Grid Background="#C8C2AA">
+            <!--#region Grid definition-->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!--#endregion-->
+
+            <!--#region Leayout-->
+            <Border Grid.Column="1" Grid.RowSpan="3" BorderThickness="1 0 0 1" BorderBrush="#999999"/>
+
+            <Button Name="Folder1_Button" 
+                Content="Wybierz Folder" 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                Grid.Column="0"
+                Click="Folder1_Button_ClickAsync"/>
+            <Button Name="Folder2_Button" 
+                Content="Wybierz Folder" 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch" 
+                Grid.Column="2" 
+                Click="Folder2_Button_ClickAsync"/>
+
+            <Border Style="{StaticResource Underline}" Grid.Column="0" Grid.Row="1">
+                <TextBlock Name="Folder1Name_TextBlock" Style="{StaticResource Centered}"/>
+            </Border>
+            <Border Style="{StaticResource Underline}" Grid.Column="2" Grid.Row="1">
+                <TextBlock Name="Folder2Name_TextBlock" Style="{StaticResource Centered}"/>
+            </Border>
+
+            <ListBox Name="Files1_ListBox"
+                 Grid.Row="2"
+                 Grid.Column="0"
+                 Background="#C8C2AA"
+                 SelectionMode="Multiple"
+                 ItemsSource="{x:Bind Files1}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:FileControl/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <ListBox Name="Files2_ListBox"
+                 Grid.Row="2"
+                 Grid.Column="2"
+                 Background="#C8C2AA"
+                 SelectionMode="Multiple"
+                 ItemsSource="{x:Bind Files2}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:FileControl/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <!--#endregion-->
+
+            <!--#region LoadingFiles-->
+            <Grid Background="#FFFFFF" Opacity="0.65" Grid.Column="0" Grid.Row="2" Name="Progress1_Grid" Visibility="Collapsed">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ProgressRing IsActive="False" Height="85" Width="85" VerticalAlignment="Center" Foreground="#58524A"/>
+                    <TextBlock Text="Ładowanie" HorizontalAlignment="Center" FontSize="18" Margin="7"/>
+                </StackPanel>
+            </Grid>
+            <Grid Background="#FFFFFF" Opacity="0.65" Grid.Column="2" Grid.Row="2" Name="Progress2_Grid" Visibility="Collapsed">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <ProgressRing IsActive="False" Height="85" Width="85" VerticalAlignment="Center" Foreground="#58524A"/>
+                    <TextBlock Text="Ładowanie" HorizontalAlignment="Center" FontSize="18" Margin="7"/>
+                </StackPanel>
+            </Grid>
+            <!--#endregion-->
+
+        </Grid>
+
+    </SplitView>
+    
 </Page>
