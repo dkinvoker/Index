@@ -150,12 +150,26 @@ namespace Index
 
         private void SelectAll1_Button_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (Files1_ListBox.SelectedItems.Count < Files1_ListBox.Items.Count)
+            {
+                Files1_ListBox.SelectAll();
+            }
+            else
+            {
+                Files1_ListBox.SelectedIndex = -1;
+            }
         }
 
         private void SelectAll2_Button_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            if (Files2_ListBox.SelectedItems.Count < Files2_ListBox.Items.Count)
+            {
+                Files2_ListBox.SelectAll();
+            }
+            else
+            {
+                Files2_ListBox.SelectedIndex = -1;
+            }
         }
         #endregion
 
