@@ -28,7 +28,7 @@ namespace Index
         {
             this.InitializeComponent();
             this.DataContextChanged += (s, e) => Bindings.Update();
-            this.LoadImageAsync();
+            this.LoadImageAtContentChangeAsync();
         }
 
         private async void MakeBigImage(FrameworkElement sender, DataContextChangedEventArgs args)
@@ -47,7 +47,26 @@ namespace Index
             Image.Source = bitmap;
         }
 
-        public async void LoadImageAsync()
+        //private async void LoadImageAtContentChangeAsync()
+        //{
+        //    switch (Globals.PictureMode)
+        //    {
+        //        case PictureMode.None:
+        //            Image.Source = null;
+        //            Image.MaxHeight = double.PositiveInfinity;
+        //            break;
+        //        case PictureMode.Small:
+        //            Image.MaxHeight = double.PositiveInfinity;
+        //            this.DataContextChanged += MakeSmallImage;
+        //            break;
+        //        case PictureMode.Big:
+        //            Image.MaxHeight = 200;
+        //            this.DataContextChanged += MakeBigImage;
+        //            break;
+        //    }
+        //}
+
+        public async void LoadImageAsync(FrameworkElement sender, DataContextChangedEventArgs args)
         {
             switch (Globals.PictureMode)
             {
@@ -57,11 +76,11 @@ namespace Index
                     break;
                 case PictureMode.Small:
                     Image.MaxHeight = double.PositiveInfinity;
-                    this.DataContextChanged += MakeSmallImage;
+                    MakeSmallImage(null, null);
                     break;
                 case PictureMode.Big:
                     Image.MaxHeight = 200;
-                    this.DataContextChanged += MakeBigImage;
+                    MakeBigImage(null, null);
                     break;
             }
         }

@@ -22,6 +22,41 @@
                CompactPaneLength="20"
                PointerMoved="Menu_SplitView_PointerMoved">
 
+        <SplitView.Resources>
+            <Storyboard x:Name="OpenPane_Storyboard">
+                <FadeOutThemeAnimation Storyboard.TargetName="Arrow_SymbolIcon"/>
+            </Storyboard>
+            <Storyboard x:Name="ClosePane_Storyboard">
+                <FadeInThemeAnimation Storyboard.TargetName="Arrow_SymbolIcon" />
+            </Storyboard>
+        </SplitView.Resources>
+
+        <SplitView.Pane>
+            <Grid>
+                <!--#region Grid definition-->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!--#endregion-->
+
+                <SymbolIcon Symbol="Play" VerticalAlignment="Center" Grid.Column="0" Name="Arrow_SymbolIcon"/>
+                <StackPanel Orientation="Vertical" Margin="10 40 0 0" Grid.Column="1">
+                    <TextBlock Text="Ikony plików" FontSize="16"/>
+                    <StackPanel Orientation="Vertical" Margin="10 7 0 0">
+                        <RadioButton Name="NoneIcon_RadioButton" Content="Brak" GroupName="IconPattern_RadioGroup" Checked="IconSize_RadioButton_Checked"/>
+                        <RadioButton Name="SmallIcon_RadioButton" Content="Małe" GroupName="IconPattern_RadioGroup" IsChecked="True" Checked="IconSize_RadioButton_Checked"/>
+                        <RadioButton Name="BigIcon_RadioButton" Content="Duże" GroupName="IconPattern_RadioGroup" Checked="IconSize_RadioButton_Checked"/>
+                    </StackPanel>
+                </StackPanel>
+                
+            </Grid>
+            
+        </SplitView.Pane>
+        
         <Grid Background="#C8C2AA">
             <!--#region Grid definition-->
             <Grid.RowDefinitions>

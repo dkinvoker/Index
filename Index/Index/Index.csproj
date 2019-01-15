@@ -99,7 +99,6 @@
       <DependentUpon>FileControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Globals.cs" />
-    <Compile Include="LoadingFilesWorkerArgs.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

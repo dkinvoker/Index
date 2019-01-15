@@ -33,6 +33,8 @@ namespace Index
         public ObservableCollection<StorageFile> Files2 { get; set; } = new ObservableCollection<StorageFile>();
         #endregion
 
+        public static event EventHandler IconOptionChanged;
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -66,10 +68,33 @@ namespace Index
             if (xPosition <= Menu_SplitView.CompactPaneLength)
             {
                 Menu_SplitView.IsPaneOpen = true;
+                OpenPane_Storyboard.Begin();
             }
             else if (xPosition > Menu_SplitView.OpenPaneLength)
             {
                 Menu_SplitView.IsPaneOpen = false;
+                ClosePane_Storyboard.Begin();
+            }
+        }
+
+        private void IconSize_RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if (sender == NoneIcon_RadioButton)
+            {
+                Globals.PictureMode = PictureMode.None;
+            }
+            else if (sender == SmallIcon_RadioButton)
+            {
+                Globals.PictureMode = PictureMode.Small;
+            }
+            else if (sender == BigIcon_RadioButton)
+            {
+                Globals.PictureMode = PictureMode.Big;
+            }
+
+            if (IconOptionChanged != null)
+            {
+                IconOptionChanged(this, null);
             }
         }
         #endregion
