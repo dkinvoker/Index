@@ -113,6 +113,28 @@ namespace Index
             Files1_ListBox.ItemsSource = Files1;
             Files2_ListBox.ItemsSource = Files2;
         }
+
+        private void Reduct_Button_Click(object sender, RoutedEventArgs e)
+        {
+            //Hide Leyout
+            Menu_SplitView.Visibility = Visibility.Collapsed;
+            DuplicateReductionLoading_Grid.Visibility = Visibility.Visible;
+            FilesReduction_ProgressRing.IsActive = true;
+
+            //Skip all that have name eqivalent
+            var newFiles1 = Files1.Where( u => !Files2.Any(v => v.Name == u.Name ) ).ToList();
+            var newFiles2 = Files2.Where( u => !Files1.Any(v => v.Name == u.Name ) ).ToList();
+
+            Files1 = new ObservableCollection<StorageFile>(newFiles1);
+            Files2 = new ObservableCollection<StorageFile>(newFiles2);
+            Files1_ListBox.ItemsSource = Files1;
+            Files2_ListBox.ItemsSource = Files2;
+
+            //Show Leyout
+            Menu_SplitView.Visibility = Visibility.Visible;
+            DuplicateReductionLoading_Grid.Visibility = Visibility.Collapsed;
+            FilesReduction_ProgressRing.IsActive = false;
+        }
         #endregion
 
         #region Helpers
@@ -150,6 +172,7 @@ namespace Index
             var progressRing = stackPanel.Children.First(u => u.GetType() == typeof(ProgressRing)) as ProgressRing;
             progressRing.IsActive = !progressRing.IsActive;
         }
+
         #endregion
 
         #region Others
@@ -182,6 +205,6 @@ namespace Index
 
         }
         #endregion
- 
+
     }
 }

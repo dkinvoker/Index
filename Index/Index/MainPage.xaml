@@ -15,137 +15,150 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <SplitView HorizontalAlignment="Left" 
+    <Grid>
+        
+        <SplitView HorizontalAlignment="Left" 
                DisplayMode="CompactOverlay" 
                OpenPaneLength="200" 
                Name="Menu_SplitView"
                CompactPaneLength="20"
                PointerMoved="Menu_SplitView_PointerMoved">
 
-        <SplitView.Resources>
-            <Storyboard x:Name="OpenPane_Storyboard">
-                <FadeOutThemeAnimation Storyboard.TargetName="Arrow_SymbolIcon"/>
-            </Storyboard>
-            <Storyboard x:Name="ClosePane_Storyboard">
-                <FadeInThemeAnimation Storyboard.TargetName="Arrow_SymbolIcon" />
-            </Storyboard>
-        </SplitView.Resources>
+            <SplitView.Resources>
+                <Storyboard x:Name="OpenPane_Storyboard">
+                    <FadeOutThemeAnimation Storyboard.TargetName="Arrow_SymbolIcon"/>
+                </Storyboard>
+                <Storyboard x:Name="ClosePane_Storyboard">
+                    <FadeInThemeAnimation Storyboard.TargetName="Arrow_SymbolIcon" />
+                </Storyboard>
+            </SplitView.Resources>
 
-        <SplitView.Pane>
-            <Grid>
+            <SplitView.Pane>
+                <Grid>
+                    <!--#region Grid definition-->
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <!--#endregion-->
+
+                    <SymbolIcon Symbol="Play" VerticalAlignment="Center" Grid.Column="0" Name="Arrow_SymbolIcon"/>
+                    <StackPanel Orientation="Vertical" Margin="10 40 0 0" Grid.Column="1">
+                        <TextBlock Text="Ikony plików" FontSize="16"/>
+                        <StackPanel Orientation="Vertical" Margin="10 7 0 0">
+                            <RadioButton Name="NoneIcon_RadioButton" Content="Brak" GroupName="IconPattern_RadioGroup" Checked="IconSize_RadioButton_Checked"/>
+                            <RadioButton Name="SmallIcon_RadioButton" Content="Małe" GroupName="IconPattern_RadioGroup" IsChecked="True" Checked="IconSize_RadioButton_Checked"/>
+                            <RadioButton Name="BigIcon_RadioButton" Content="Duże" GroupName="IconPattern_RadioGroup" Checked="IconSize_RadioButton_Checked"/>
+                        </StackPanel>
+                        <Button Margin="0 30 0 0">
+                            <TextBlock Padding="5 0 5 0" Text="Sortuj"/>
+                            <Button.Flyout>
+                                <MenuFlyout>
+                                    <MenuFlyoutItem Name="AscendingSort_Button" Text="Rosnąco" Click="AscendingSort_Button_Click"/>
+                                    <MenuFlyoutItem Name="DescendingSort_Button" Text="Malejąco" Click="DescendingSort_Button_Click"/>
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+
+                        <Button Name="Reduct_Button" Margin="0 30 0 0" Padding="5 5 5 5" Content="Wyeliminuj duplikaty"  Click="Reduct_Button_Click"/>
+                    </StackPanel>
+
+                </Grid>
+
+            </SplitView.Pane>
+
+            <Grid Background="#C8C2AA">
                 <!--#region Grid definition-->
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="30"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <!--#endregion-->
 
-                <SymbolIcon Symbol="Play" VerticalAlignment="Center" Grid.Column="0" Name="Arrow_SymbolIcon"/>
-                <StackPanel Orientation="Vertical" Margin="10 40 0 0" Grid.Column="1">
-                    <TextBlock Text="Ikony plików" FontSize="16"/>
-                    <StackPanel Orientation="Vertical" Margin="10 7 0 0">
-                        <RadioButton Name="NoneIcon_RadioButton" Content="Brak" GroupName="IconPattern_RadioGroup" Checked="IconSize_RadioButton_Checked"/>
-                        <RadioButton Name="SmallIcon_RadioButton" Content="Małe" GroupName="IconPattern_RadioGroup" IsChecked="True" Checked="IconSize_RadioButton_Checked"/>
-                        <RadioButton Name="BigIcon_RadioButton" Content="Duże" GroupName="IconPattern_RadioGroup" Checked="IconSize_RadioButton_Checked"/>
-                    </StackPanel>
-                    <Button Margin="0 30 0 0">
-                        <TextBlock Padding="5 0 5 0" Text="Sortuj"/>
-                        <Button.Flyout>
-                            <MenuFlyout>
-                                <MenuFlyoutItem Name="AscendingSort_Button" Text="Rosnąco" Click="AscendingSort_Button_Click"/>
-                                <MenuFlyoutItem Name="DescendingSort_Button" Text="Malejąco" Click="DescendingSort_Button_Click"/>
-                            </MenuFlyout>
-                        </Button.Flyout>
-                    </Button>
-                </StackPanel>
-                
-            </Grid>
-            
-        </SplitView.Pane>
-        
-        <Grid Background="#C8C2AA">
-            <!--#region Grid definition-->
-            <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="30"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <!--#endregion-->
+                <!--#region Leayout-->
+                <Border Grid.Column="1" Grid.RowSpan="3" BorderThickness="1 0 0 1" BorderBrush="#999999"/>
 
-            <!--#region Leayout-->
-            <Border Grid.Column="1" Grid.RowSpan="3" BorderThickness="1 0 0 1" BorderBrush="#999999"/>
-
-            <Button Name="Folder1_Button" 
+                <Button Name="Folder1_Button" 
                 Content="Wybierz Folder" 
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 Grid.Column="0"
                 Click="Folder1_Button_ClickAsync"/>
-            <Button Name="Folder2_Button" 
+                <Button Name="Folder2_Button" 
                 Content="Wybierz Folder" 
                 HorizontalAlignment="Stretch" 
                 VerticalAlignment="Stretch" 
                 Grid.Column="2" 
                 Click="Folder2_Button_ClickAsync"/>
 
-            <Border Style="{StaticResource Underline}" Grid.Column="0" Grid.Row="1">
-                <TextBlock Name="Folder1Name_TextBlock" Style="{StaticResource Centered}"/>
-            </Border>
-            <Border Style="{StaticResource Underline}" Grid.Column="2" Grid.Row="1">
-                <TextBlock Name="Folder2Name_TextBlock" Style="{StaticResource Centered}"/>
-            </Border>
+                <Border Style="{StaticResource Underline}" Grid.Column="0" Grid.Row="1">
+                    <TextBlock Name="Folder1Name_TextBlock" Style="{StaticResource Centered}"/>
+                </Border>
+                <Border Style="{StaticResource Underline}" Grid.Column="2" Grid.Row="1">
+                    <TextBlock Name="Folder2Name_TextBlock" Style="{StaticResource Centered}"/>
+                </Border>
 
-            <ListBox Name="Files1_ListBox"
+                <ListBox Name="Files1_ListBox"
                  Grid.Row="2"
                  Grid.Column="0"
                  Background="#C8C2AA"
                  SelectionMode="Multiple"
                  ItemsSource="{x:Bind Files1}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <local:FileControl/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <ListBox Name="Files2_ListBox"
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <local:FileControl/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <ListBox Name="Files2_ListBox"
                  Grid.Row="2"
                  Grid.Column="2"
                  Background="#C8C2AA"
                  SelectionMode="Multiple"
                  ItemsSource="{x:Bind Files2}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <local:FileControl/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-            <!--#endregion-->
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <local:FileControl/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <!--#endregion-->
 
-            <!--#region LoadingFiles-->
-            <Grid Background="#FFFFFF" Opacity="0.65" Grid.Column="0" Grid.Row="2" Name="Progress1_Grid" Visibility="Collapsed">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <ProgressRing IsActive="False" Height="85" Width="85" VerticalAlignment="Center" Foreground="#58524A"/>
-                    <TextBlock Text="Ładowanie" HorizontalAlignment="Center" FontSize="18" Margin="7"/>
-                </StackPanel>
-            </Grid>
-            <Grid Background="#FFFFFF" Opacity="0.65" Grid.Column="2" Grid.Row="2" Name="Progress2_Grid" Visibility="Collapsed">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <ProgressRing IsActive="False" Height="85" Width="85" VerticalAlignment="Center" Foreground="#58524A"/>
-                    <TextBlock Text="Ładowanie" HorizontalAlignment="Center" FontSize="18" Margin="7"/>
-                </StackPanel>
-            </Grid>
-            <!--#endregion-->
+                <!--#region LoadingFiles-->
+                <Grid Background="#FFFFFF" Opacity="0.65" Grid.Column="0" Grid.Row="2" Name="Progress1_Grid" Visibility="Collapsed">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ProgressRing IsActive="False" Height="85" Width="85" VerticalAlignment="Center" Foreground="#58524A"/>
+                        <TextBlock Text="Ładowanie" HorizontalAlignment="Center" FontSize="18" Margin="7"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Background="#FFFFFF" Opacity="0.65" Grid.Column="2" Grid.Row="2" Name="Progress2_Grid" Visibility="Collapsed">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ProgressRing IsActive="False" Height="85" Width="85" VerticalAlignment="Center" Foreground="#58524A"/>
+                        <TextBlock Text="Ładowanie" HorizontalAlignment="Center" FontSize="18" Margin="7"/>
+                    </StackPanel>
+                </Grid>
+                <!--#endregion-->
 
+            </Grid>
+
+        </SplitView>
+
+        <Grid Name="DuplicateReductionLoading_Grid" Visibility="Collapsed" Background="#FFFFFF" Opacity="0.65">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 -100 0 0">
+                <TextBlock Text="Wyszukiwanie różnic" FontSize="24"/>
+                <ProgressRing IsActive="False" Name="FilesReduction_ProgressRing" Height="200" Width="200" Margin="0 10 0 0"/>
+            </StackPanel>
         </Grid>
-
-    </SplitView>
+        
+    </Grid>
     
 </Page>
