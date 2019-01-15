@@ -28,10 +28,16 @@ namespace Index
         {
             this.InitializeComponent();
             this.DataContextChanged += (s, e) => Bindings.Update();
-            this.LoadImageAtContentChangeAsync();
+            this.DataContextChanged += LoadImageAsync;
+            MainPage.IconOptionChanged += MainPage_IconOptionChanged;
         }
 
-        private async void MakeBigImage(FrameworkElement sender, DataContextChangedEventArgs args)
+        private void MainPage_IconOptionChanged(object sender, EventArgs e)
+        {
+            this.LoadImageAsync(null, null);
+        }
+
+        private async void MakeBigImage()
         {
             var image = await File.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem);
             BitmapImage bitmap = new BitmapImage();
@@ -39,32 +45,13 @@ namespace Index
             Image.Source = bitmap;
         }
 
-        private async void MakeSmallImage(FrameworkElement sender, DataContextChangedEventArgs args)
+        private async void MakeSmallImage()
         {
             var image = await File.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.ListView);
             BitmapImage bitmap = new BitmapImage();
             bitmap.SetSource(image);
             Image.Source = bitmap;
         }
-
-        //private async void LoadImageAtContentChangeAsync()
-        //{
-        //    switch (Globals.PictureMode)
-        //    {
-        //        case PictureMode.None:
-        //            Image.Source = null;
-        //            Image.MaxHeight = double.PositiveInfinity;
-        //            break;
-        //        case PictureMode.Small:
-        //            Image.MaxHeight = double.PositiveInfinity;
-        //            this.DataContextChanged += MakeSmallImage;
-        //            break;
-        //        case PictureMode.Big:
-        //            Image.MaxHeight = 200;
-        //            this.DataContextChanged += MakeBigImage;
-        //            break;
-        //    }
-        //}
 
         public async void LoadImageAsync(FrameworkElement sender, DataContextChangedEventArgs args)
         {
@@ -76,11 +63,11 @@ namespace Index
                     break;
                 case PictureMode.Small:
                     Image.MaxHeight = double.PositiveInfinity;
-                    MakeSmallImage(null, null);
+                    MakeSmallImage();
                     break;
                 case PictureMode.Big:
                     Image.MaxHeight = 200;
-                    MakeBigImage(null, null);
+                    MakeBigImage();
                     break;
             }
         }
