@@ -73,9 +73,10 @@
             <Grid Background="#C8C2AA">
                 <!--#region Grid definition-->
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="45"/>
+                    <RowDefinition Height="35"/>
                     <RowDefinition Height="*"/>
+                    <RowDefinition Height="30"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -88,31 +89,42 @@
                 <Border Grid.Column="1" Grid.RowSpan="3" BorderThickness="1 0 0 1" BorderBrush="#999999"/>
 
                 <Button Name="Folder1_Button" 
-                Content="Wybierz Folder" 
-                HorizontalAlignment="Stretch" 
-                VerticalAlignment="Stretch" 
-                Grid.Column="0"
-                Click="Folder1_Button_ClickAsync"/>
+                        Content="Wybierz Folder" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch" 
+                        Grid.Column="0"
+                        Click="Folder1_Button_ClickAsync"/>
                 <Button Name="Folder2_Button" 
-                Content="Wybierz Folder" 
-                HorizontalAlignment="Stretch" 
-                VerticalAlignment="Stretch" 
-                Grid.Column="2" 
-                Click="Folder2_Button_ClickAsync"/>
+                        Content="Wybierz Folder" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch" 
+                        Grid.Column="2" 
+                        Click="Folder2_Button_ClickAsync"/>
 
                 <Border Style="{StaticResource Underline}" Grid.Column="0" Grid.Row="1">
-                    <TextBlock Name="Folder1Name_TextBlock" Style="{StaticResource Centered}"/>
+                    <Grid>
+                        <Button Name="SelectAll1_Button" Click="SelectAll1_Button_Click" VerticalAlignment="Stretch">
+                            <SymbolIcon Symbol="AllApps"/>
+                        </Button>
+                        <TextBlock Name="Folder1Name_TextBlock" Style="{StaticResource Centered}"/>
+                    </Grid>
                 </Border>
                 <Border Style="{StaticResource Underline}" Grid.Column="2" Grid.Row="1">
-                    <TextBlock Name="Folder2Name_TextBlock" Style="{StaticResource Centered}"/>
+                    <Grid>
+                        <Button Name="SelectAll2_Button" Click="SelectAll2_Button_Click" VerticalAlignment="Stretch">
+                            <SymbolIcon Symbol="AllApps"/>
+                        </Button>
+                        <TextBlock Name="Folder2Name_TextBlock" Style="{StaticResource Centered}"/>
+                    </Grid>
                 </Border>
 
                 <ListBox Name="Files1_ListBox"
-                 Grid.Row="2"
-                 Grid.Column="0"
-                 Background="#C8C2AA"
-                 SelectionMode="Multiple"
-                 ItemsSource="{x:Bind Files1}">
+                         Grid.Row="2"
+                         Grid.Column="0"
+                         Background="#C8C2AA"
+                         SelectionMode="Multiple"
+                         SelectionChanged="Files1_ListBox_SelectionChanged"
+                         ItemsSource="{x:Bind Files1}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <local:FileControl/>
@@ -120,11 +132,12 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
                 <ListBox Name="Files2_ListBox"
-                 Grid.Row="2"
-                 Grid.Column="2"
-                 Background="#C8C2AA"
-                 SelectionMode="Multiple"
-                 ItemsSource="{x:Bind Files2}">
+                         Grid.Row="2"
+                         Grid.Column="2"
+                         Background="#C8C2AA"
+                         SelectionMode="Multiple"
+                         SelectionChanged="Files2_ListBox_SelectionChanged"
+                         ItemsSource="{x:Bind Files2}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <local:FileControl/>
@@ -147,6 +160,28 @@
                     </StackPanel>
                 </Grid>
                 <!--#endregion-->
+
+                <Button Name="TransferToFolder2_Button" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch"
+                        Grid.Column="0"
+                        Grid.Row="3">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Name="Selected1_TextBlock" Text="0" VerticalAlignment="Center"/>
+                        <SymbolIcon Symbol="Forward" Margin="10 0 0 0"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Name="TransferToFolder1_Button" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Stretch"
+                        Grid.Column="2"
+                        Grid.Row="3">
+                    <StackPanel Orientation="Horizontal">
+                        <SymbolIcon Symbol="Back" Margin="0 0 10 0"/>
+                        <TextBlock Name="Selected2_TextBlock" Text="0" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
 
             </Grid>
 

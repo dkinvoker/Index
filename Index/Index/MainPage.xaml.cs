@@ -135,6 +135,28 @@ namespace Index
             DuplicateReductionLoading_Grid.Visibility = Visibility.Collapsed;
             FilesReduction_ProgressRing.IsActive = false;
         }
+
+        private void Files1_ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var slectedItemNumber = (sender as ListBox).SelectedItems?.Count;
+            Selected1_TextBlock.Text = slectedItemNumber.ToString();
+        }
+
+        private void Files2_ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var slectedItemNumber = (sender as ListBox).SelectedItems?.Count;
+            Selected2_TextBlock.Text = slectedItemNumber.ToString();
+        }
+
+        private void SelectAll1_Button_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void SelectAll2_Button_Click(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         #region Helpers
