@@ -51,6 +51,15 @@
                         <RadioButton Name="SmallIcon_RadioButton" Content="Małe" GroupName="IconPattern_RadioGroup" IsChecked="True" Checked="IconSize_RadioButton_Checked"/>
                         <RadioButton Name="BigIcon_RadioButton" Content="Duże" GroupName="IconPattern_RadioGroup" Checked="IconSize_RadioButton_Checked"/>
                     </StackPanel>
+                    <Button Margin="0 30 0 0">
+                        <TextBlock Padding="5 0 5 0" Text="Sortuj"/>
+                        <Button.Flyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Name="AscendingSort_Button" Text="Rosnąco" Click="AscendingSort_Button_Click"/>
+                                <MenuFlyoutItem Name="DescendingSort_Button" Text="Malejąco" Click="DescendingSort_Button_Click"/>
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
                 </StackPanel>
                 
             </Grid>

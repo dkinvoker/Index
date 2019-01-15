@@ -39,18 +39,24 @@ namespace Index
 
         private async void MakeBigImage()
         {
-            var image = await File.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem);
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.SetSource(image);
-            Image.Source = bitmap;
+            if (File != null)
+            {
+                var image = await File.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.SingleItem);
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.SetSource(image);
+                Image.Source = bitmap;
+            }
         }
 
         private async void MakeSmallImage()
         {
-            var image = await File.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.ListView);
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.SetSource(image);
-            Image.Source = bitmap;
+            if (File != null)
+            {
+                var image = await File.GetThumbnailAsync(Windows.Storage.FileProperties.ThumbnailMode.ListView);
+                BitmapImage bitmap = new BitmapImage();
+                bitmap.SetSource(image);
+                Image.Source = bitmap;
+            }
         }
 
         public async void LoadImageAsync(FrameworkElement sender, DataContextChangedEventArgs args)

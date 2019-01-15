@@ -97,6 +97,22 @@ namespace Index
                 IconOptionChanged(this, null);
             }
         }
+
+        private void AscendingSort_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Files1 = new ObservableCollection<StorageFile>(Files1.OrderBy(u => u.Name));
+            Files2 = new ObservableCollection<StorageFile>(Files2.OrderBy(u => u.Name));
+            Files1_ListBox.ItemsSource = Files1;
+            Files2_ListBox.ItemsSource = Files2;
+        }
+
+        private void DescendingSort_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Files1 = new ObservableCollection<StorageFile>(Files1.OrderByDescending(u => u.Name));
+            Files2 = new ObservableCollection<StorageFile>(Files2.OrderByDescending(u => u.Name));
+            Files1_ListBox.ItemsSource = Files1;
+            Files2_ListBox.ItemsSource = Files2;
+        }
         #endregion
 
         #region Helpers
@@ -166,6 +182,6 @@ namespace Index
 
         }
         #endregion
-
+ 
     }
 }
