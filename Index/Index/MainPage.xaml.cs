@@ -31,6 +31,9 @@ namespace Index
         #region Props
         public ObservableCollection<StorageFile> Files1 { get; set; } = new ObservableCollection<StorageFile>();
         public ObservableCollection<StorageFile> Files2 { get; set; } = new ObservableCollection<StorageFile>();
+
+        public StorageFolder Folder1 { get; set; }
+        public StorageFolder Folder2 { get; set; }
         #endregion
 
         public static event EventHandler IconOptionChanged;
@@ -44,9 +47,34 @@ namespace Index
         }
 
         #region Events Handlers
+        private async void TransferToFolder2_Button_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            Coping_Grid.Visibility = Visibility.Visible;
+            Coping_ProgressRing.IsActive = true;
+
+            var filesToCopy = Files1_ListBox.SelectedItems.ToList();
+            await CopyAsync(Folder2, filesToCopy);
+
+            Coping_Grid.Visibility = Visibility.Collapsed;
+            Coping_ProgressRing.IsActive = false;
+        }
+
+        private async void TransferToFolder1_Button_ClickAsync(object sender, RoutedEventArgs e)
+        {
+            Coping_Grid.Visibility = Visibility.Visible;
+            Coping_ProgressRing.IsActive = true;
+
+            var filesToCopy = Files2_ListBox.SelectedItems.ToList();
+            await CopyAsync(Folder1, filesToCopy);
+
+            Coping_Grid.Visibility = Visibility.Collapsed;
+            Coping_ProgressRing.IsActive = false;
+        }
+
         private async void Folder1_Button_ClickAsync(object sender, RoutedEventArgs e)
         {
             var folder = await TakeFolderAccess(this.Folder1Name_TextBlock);
+            Folder1 = folder;
             if (folder != null)
             {
                 LoadFilesList(folder, Files1, Progress1_Grid);
@@ -56,6 +84,7 @@ namespace Index
         private async void Folder2_Button_ClickAsync(object sender, RoutedEventArgs e)
         {
             var folder = await TakeFolderAccess(this.Folder2Name_TextBlock);
+            Folder2 = folder;
             if (folder != null)
             {
                 LoadFilesList(folder, Files2, Progress2_Grid);
@@ -92,10 +121,7 @@ namespace Index
                 Globals.PictureMode = PictureMode.Big;
             }
 
-            if (IconOptionChanged != null)
-            {
-                IconOptionChanged(this, null);
-            }
+            IconOptionChanged?.Invoke(this, null);
         }
 
         private void AscendingSort_Button_Click(object sender, RoutedEventArgs e)
@@ -114,24 +140,17 @@ namespace Index
             Files2_ListBox.ItemsSource = Files2;
         }
 
-        private void Reduct_Button_Click(object sender, RoutedEventArgs e)
+        private async void Reduct_Button_Click(object sender, RoutedEventArgs e)
         {
             //Hide Leyout
-            Menu_SplitView.Visibility = Visibility.Collapsed;
             DuplicateReductionLoading_Grid.Visibility = Visibility.Visible;
             FilesReduction_ProgressRing.IsActive = true;
 
-            //Skip all that have name eqivalent
-            var newFiles1 = Files1.Where( u => !Files2.Any(v => v.Name == u.Name ) ).ToList();
-            var newFiles2 = Files2.Where( u => !Files1.Any(v => v.Name == u.Name ) ).ToList();
-
-            Files1 = new ObservableCollection<StorageFile>(newFiles1);
-            Files2 = new ObservableCollection<StorageFile>(newFiles2);
+            await ReductFilesAsync();
             Files1_ListBox.ItemsSource = Files1;
             Files2_ListBox.ItemsSource = Files2;
 
             //Show Leyout
-            Menu_SplitView.Visibility = Visibility.Visible;
             DuplicateReductionLoading_Grid.Visibility = Visibility.Collapsed;
             FilesReduction_ProgressRing.IsActive = false;
         }
@@ -209,6 +228,31 @@ namespace Index
             progressRing.IsActive = !progressRing.IsActive;
         }
 
+        private async Task CopyAsync(StorageFolder folderTo, List<object> files)
+        {
+            if (folderTo == null)
+            {
+                return;
+            }
+
+            int done = 0;
+            int toDo = files.Count;
+            Progress_ProgressBar.Value = 0;
+            Progress_ProgressBar.Maximum = toDo;
+            Ratio_TextBlock.Text = $"{done}/{toDo}";
+
+            var targetFolder = await folderTo.CreateFolderAsync("IndexCopy", CreationCollisionOption.OpenIfExists);
+            foreach (var item in files)
+            {
+                StorageFile file = item as StorageFile;
+                await file.CopyAsync(targetFolder, file.Name, NameCollisionOption.GenerateUniqueName);
+                done++;
+                Progress_ProgressBar.Value = done;
+                Procentage_TextBlock.Text = $"{100 * done / toDo}%";
+                Ratio_TextBlock.Text = $"{done}/{toDo}";
+            }
+        }
+
         #endregion
 
         #region Others
@@ -240,7 +284,23 @@ namespace Index
             }
 
         }
+
+        private async Task ReductFilesAsync()
+        {
+            Task task = new Task(() =>
+            {
+               //Skip all that have name eqivalent
+               var newFiles1 = Files1.Where(u => !Files2.Any(v => v.Name == u.Name)).ToList();
+               var newFiles2 = Files2.Where(u => !Files1.Any(v => v.Name == u.Name)).ToList();
+
+               Files1 = new ObservableCollection<StorageFile>(newFiles1);
+               Files2 = new ObservableCollection<StorageFile>(newFiles2);
+            });
+            task.Start();
+            await task;
+        }
         #endregion
 
+        
     }
 }

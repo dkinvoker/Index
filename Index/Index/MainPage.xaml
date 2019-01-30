@@ -165,7 +165,8 @@
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch"
                         Grid.Column="0"
-                        Grid.Row="3">
+                        Grid.Row="3"
+                        Click="TransferToFolder2_Button_ClickAsync">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Name="Selected1_TextBlock" Text="0" VerticalAlignment="Center"/>
                         <SymbolIcon Symbol="Forward" Margin="10 0 0 0"/>
@@ -176,7 +177,8 @@
                         HorizontalAlignment="Stretch" 
                         VerticalAlignment="Stretch"
                         Grid.Column="2"
-                        Grid.Row="3">
+                        Grid.Row="3"
+                        Click="TransferToFolder1_Button_ClickAsync">
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Symbol="Back" Margin="0 0 10 0"/>
                         <TextBlock Name="Selected2_TextBlock" Text="0" VerticalAlignment="Center"/>
@@ -190,10 +192,29 @@
         <Grid Name="DuplicateReductionLoading_Grid" Visibility="Collapsed" Background="#FFFFFF" Opacity="0.65">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 -100 0 0">
                 <TextBlock Text="Wyszukiwanie różnic" FontSize="24"/>
-                <ProgressRing IsActive="False" Name="FilesReduction_ProgressRing" Height="200" Width="200" Margin="0 10 0 0"/>
+                <ProgressRing IsActive="False" 
+                              Name="FilesReduction_ProgressRing" 
+                              Height="200" 
+                              Width="200" 
+                              Margin="0 10 0 0" Foreground="#58524A"/>
             </StackPanel>
         </Grid>
-        
+
+        <Grid Background="#C8C2AA" Name="Coping_Grid" Visibility="Collapsed">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="600">
+                <StackPanel Margin="5" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <TextBlock Text="Kopiowanie" FontSize="26"/>
+                    <TextBlock Text="0/0" Name="Ratio_TextBlock" FontSize="26" Margin="5 0 0 0"/>
+                </StackPanel>
+
+                <Grid>
+                    <TextBlock Text="0%" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="46" Name="Procentage_TextBlock"/>
+                    <ProgressRing Height="400" Width="400" IsActive="False" Foreground="#58524A" Name="Coping_ProgressRing" Margin="0 30 0 30"/>
+                </Grid>
+                <ProgressBar Foreground="#58524A" Name="Progress_ProgressBar" Margin="0 20 0 0"/>
+            </StackPanel>
+        </Grid>
+
     </Grid>
     
 </Page>
